@@ -60,5 +60,4 @@ Users can browse available courses, view course details, and enroll directly fro
 
 AI tools were used to assist with generating Django model structures, improving development speed and ensuring consistency in the database schema.
 
----
 
