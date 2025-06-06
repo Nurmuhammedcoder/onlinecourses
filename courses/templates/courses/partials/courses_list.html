@@ -1,0 +1,9 @@
+{% for course in courses %}
+<div class="col-md-4">
+    <!-- Карточка курса -->
+</div>
+{% empty %}
+<div class="col-12">
+    <div class="alert alert-info">Курсы по вашему запросу не найдены</div>
+</div>
+{% endfor %}

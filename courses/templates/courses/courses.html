@@ -1,0 +1,43 @@
+{% extends 'courses/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1>Все курсы</h1>
+
+<!-- Добавьте форму фильтрации -->
+<form method="get" class="mb-4">
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-primary">Фильтровать</button>
+</form>
+
+<div class="row">
+    {% for course in courses %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">{{ course.title }}</h5>
+                <p class="card-text">{{ course.description|truncatechars:100 }}</p>
+                
+                {% if user.is_authenticated %}
+                    {% if course.id in joined_course_ids %}
+                        <a href="{% url 'video_lessons' course.id %}" class="btn btn-success">Смотреть уроки</a>
+                    {% else %}
+                        <form method="post" action="{% url 'join_course' course.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Записаться на курс</button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'login' %}?next={% url 'video_lessons' course.id %}" class="btn btn-outline-secondary">
+                        Войти, чтобы записаться
+                    </a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

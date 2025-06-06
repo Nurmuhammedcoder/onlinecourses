@@ -1,0 +1,112 @@
+<!-- courses/profile/profile.html -->
+{% extends 'courses/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <!-- Левая колонка с аватаром -->
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}" 
+                         class="rounded-circle mb-3" 
+                         width="150" 
+                         height="150"
+                         alt="Аватар пользователя">
+                {% else %}
+                    <img src="{% static 'images/default_avatar.png' %}" 
+                         class="rounded-circle mb-3" 
+                         width="150" 
+                         height="150"
+                         alt="Аватар по умолчанию">
+                {% endif %}
+                
+                <h3>{{ user.username }}</h3>
+                <p class="text-muted">{{ user.email }}</p>
+                
+                <div class="mt-2">
+                    {% if user.is_student %}
+                        <span class="badge bg-primary">Студент</span>
+                    {% endif %}
+                    {% if user.is_teacher %}
+                        <span class="badge bg-success">Преподаватель</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Правая колонка с формой -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Редактирование профиля</legend>
+                        {{ u_form|crispy }}
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-primary" type="submit">Сохранить изменения</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- В конце блока content -->
+    <div class="mt-4">
+        <a href="{% url 'logout' %}" class="btn btn-outline-danger">
+            <i class="fas fa-sign-out-alt"></i> Выйти из аккаунта
+        </a>
+    </div>
+    {% if user_progress %}
+    <section class="progress-section mt-5">
+        <h3>Ваш прогресс</h3>
+        <div class="row">
+            {% for progress in user_progress %}
+            <div class="col-md-4 mb-4">
+                <div class="card {% if not progress.course %}border-danger{% endif %}">
+                    <div class="card-body">
+                        {% if progress.course %}
+                            <h5>{{ progress.course.title|default:"Без названия" }}</h5>
+                        {% else %}
+                            <h5 class="text-danger">Курс удален</h5>
+                        {% endif %}
+                        
+                        <div class="progress mt-3">
+                            <div class="progress-bar 
+                                {% if progress.progress_percentage >= 80 %}bg-success
+                                {% elif progress.progress_percentage >= 50 %}bg-warning
+                                {% else %}bg-danger{% endif %}" 
+                                role="progressbar" 
+                                style="width: {{ progress.progress_percentage|default:0 }}%;
+                                    min-width: 2em;">
+                                {{ progress.progress_percentage|default:0 }}%
+                            </div>
+                        </div>
+                        
+                        {% if progress.last_accessed %}
+                            <small class="text-muted">
+                                Последний доступ: {{ progress.last_accessed|date:"d.m.Y H:i" }}
+                            </small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+    <!-- Добавьте после блока с прогрессом -->
+{% if recommended_courses %}
+<div class="mt-5">
+    <h4>Рекомендуем продолжить обучение</h4>
+    <div class="row">
+        {% include 'courses/_course_cards.html' with courses=recommended_courses %}
+    </div>
+</div>
+{% endif %}
+</div>
+{% endblock %}

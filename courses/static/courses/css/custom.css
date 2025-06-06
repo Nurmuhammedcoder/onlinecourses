@@ -1,0 +1,20 @@
+/* Кастомные стили для карточек курсов */
+.card {
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.progress {
+    height: 25px;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    font-size: 0.9rem;
+    line-height: 25px;
+}

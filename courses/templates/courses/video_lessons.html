@@ -1,0 +1,51 @@
+{% extends 'courses/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="lessons-container mt-4">
+    <h3>Уроки курса:</h3>
+    
+    {% if user == course.instructor %}
+    <a href="{% url 'add_lesson' course.id %}" class="btn btn-success mb-3">
+        + Добавить урок
+    </a>
+    {% endif %}
+
+    <div class="list-group">
+        {% for lesson in course.lessons.all %}
+            <div class="list-group-item">
+                <div class="d-flex justify-content-between">
+                    <h5>{{ lesson.title }}</h5>
+                    <span class="badge bg-primary">
+                        {{ lesson.get_lesson_type_display }}
+                    </span>
+                </div>
+                
+                {% if lesson.lesson_type == 'video' %}
+                    <div class="ratio ratio-16x9 my-3">
+                        <iframe 
+                            src="{{ lesson.video_url }}" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                {% else %}
+                    <div class="lesson-content">
+                        {{ lesson.content|linebreaks }}
+                    </div>
+                {% endif %}
+
+                {% if user == course.instructor %}
+                    <a href="{% url 'edit_lesson' lesson.id %}" 
+                       class="btn btn-sm btn-outline-secondary">
+                        Редактировать
+                    </a>
+                {% endif %}
+            </div>
+        {% empty %}
+            <div class="alert alert-info">
+                В этом курсе пока нет уроков
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

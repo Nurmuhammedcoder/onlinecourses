@@ -1,0 +1,24 @@
+{% extends 'courses/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Наши преподаватели</h1>
+    <div class="row">
+        {% for teacher in teachers %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ teacher.photo.url }}" class="card-img-top" alt="{{ teacher.user.get_full_name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ teacher.user.get_full_name }}</h5>
+                    <p class="text-muted">{{ teacher.specialization }}</p>
+                    <p class="card-text">{{ teacher.bio|truncatechars:150 }}</p>
+                    <div class="d-flex justify-content-between">
+                        <span class="badge bg-primary">Опыт: {{ teacher.experience }} лет</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

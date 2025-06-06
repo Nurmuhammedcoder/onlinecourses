@@ -1,0 +1,221 @@
+{% extends 'courses/base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+
+<section class="hero-section bg-dark text-white py-5 animate__animated animate__fadeIn">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Онлайн-обучение для всех</h1>
+                <p class="lead mb-4">Освойте новые навыки с лучшими преподавателями. Учитесь в удобном темпе из любой точки мира.</p>
+                <div class="d-flex gap-3">
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-4">Начать обучение</a>
+                    <a href="#courses" class="btn btn-outline-light btn-lg px-4">Наши курсы</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="https://via.placeholder.com/600x400" alt="Обучение онлайн" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Прогресс пользователя -->
+{% if recommended_courses %}
+<section class="recommended-courses mt-5">
+    <h3>Рекомендуемые курсы</h3>
+    <div class="row">
+        {% for course in recommended_courses %}
+        <div class="col-md-4 mb-4">
+            <!-- Карточка курса -->
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+<!-- Features Section -->
+<section class="py-5 animate__animated animate__fadeIn">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Почему выбирают нас</h2>
+            <p class="text-muted lead">Лучшие образовательные решения для вашего роста</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-3 d-inline-block mb-3">
+                            <i class="bi bi-laptop fs-2"></i>
+                        </div>
+                        <h4>Доступность</h4>
+                        <p class="text-muted">Учитесь в любое время из любой точки мира с любого устройства</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-success bg-opacity-10 text-success rounded-circle p-3 d-inline-block mb-3">
+                            <i class="bi bi-people fs-2"></i>
+                        </div>
+                        <h4>Эксперты</h4>
+                        <p class="text-muted">Преподаватели с практическим опытом в своих областях</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-warning bg-opacity-10 text-warning rounded-circle p-3 d-inline-block mb-3">
+                            <i class="bi bi-award fs-2"></i>
+                        </div>
+                        <h4>Сертификаты</h4>
+                        <p class="text-muted">Получайте сертификаты по окончании каждого курса</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Popular Courses -->
+<section id="courses" class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Популярные курсы</h2>
+            <p class="text-muted lead">Начните обучение с самых востребованных программ</p>
+        </div>
+        
+        <div class="row g-4">
+            {% for course in featured_courses %}
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="badge bg-primary">{{ course.category }}</span>
+                            <span class="text-warning">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-half"></i>
+                            </span>
+                        </div>
+                        <h5 class="card-title">{{ course.title }}</h5>
+                        <p class="card-text text-muted">{{ course.description|truncatechars:100 }}</p>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'video_lessons' course.id %}" class="btn btn-sm btn-outline-primary">Подробнее</a>
+                            <span class="text-success fw-bold">Бесплатно</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'course_list' %}" class="btn btn-outline-primary px-4">Все курсы</a>
+        </div>
+    </div>
+</section>
+{% if user.is_authenticated and recommended_courses %}
+<section class="py-5 animate__animated animate__fadeIn">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">
+                <i class="bi bi-hand-thumbs-up me-2"></i>
+                Рекомендуем для вас
+            </h2>
+            <p class="text-muted lead">Подобрано специально по вашим интересам</p>
+            <p class="text-muted small mt-3">
+                Хотите изменить интересы? 
+                <a href="{% url 'profile' %}" class="text-decoration-none">
+                    Обновите свой профиль
+                </a>
+            </p>
+        </div>
+        
+        <div class="row g-4">
+            {% for course in recommended_courses %}
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="badge bg-primary">{{ course.get_category_display }}</span>
+                            <span class="text-warning">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-half"></i>
+                            </span>
+                        </div>
+                        <h5 class="card-title">{{ course.title }}</h5>
+                        <p class="card-text text-muted">{{ course.description|truncatechars:100 }}</p>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'video_lessons' course.id %}" class="btn btn-sm btn-outline-primary">Подробнее</a>
+                            <span class="text-success fw-bold">Бесплатно</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+<!-- Testimonials -->
+<section class="py-5 animate__animated animate__fadeIn">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Отзывы студентов</h2>
+            <p class="text-muted lead">Что говорят наши ученики</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex mb-3">
+                            <img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="Student">
+                            <div>
+                                <h5 class="mb-0">Алексей Петров</h5>
+                                <small class="text-muted">Курс Python</small>
+                            </div>
+                        </div>
+                        <p class="card-text">Отличный курс для начинающих! Все объясняется доступно и понятно. После курса смог устроиться на работу джуниором.</p>
+                        <div class="text-warning">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Добавьте еще 2 аналогичных отзыва -->
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center py-4">
+        <h2 class="fw-bold mb-4">Готовы начать обучение?</h2>
+        <p class="lead mb-4">Присоединяйтесь к тысячам студентов, которые уже улучшают свои навыки с нами</p>
+        <a href="{% url 'register' %}" class="btn btn-light btn-lg px-5">Зарегистрироваться</a>
+    </div>
+</section>
+
+{% endblock %}
