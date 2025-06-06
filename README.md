@@ -10,11 +10,11 @@ Website platform with online courses and admin panel
 - Simple registration to courses with one click
 
 **Project structure**
-courses/ #application
-media/ #folder for medias
-onlinecourses/ #project
-db.sqlite3 #database
-manage.py #manage file for django
+- courses/ #application
+- media/ #folder for medias
+- onlinecourses/ #project
+- db.sqlite3 #database
+- manage.py #manage file for django
 
 **Technologies**
 - Python 3.13
